@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="fragment_text">
+        <item name="android:textColor">#ffacacac</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+
+        -->
+    </style>
+    <style name="BaseTextViewStyle" parent="@android:style/Widget.TextView" />
+
+    <style name="BaseButtonStyle" parent="@android:style/Widget.Button" />
+
+    <style name="BaseEditTextStyle" parent="@android:style/Widget.EditText" />
+
+    <style name="BaseCheckBoxStyle" parent="@android:style/Widget.CompoundButton.CheckBox" />
+
+    <style name="BaseRadioButtonStyle" parent="@android:style/Widget.CompoundButton.RadioButton" />
+
+    <style name="BaseToggleButtonStyle" parent="@android:style/Widget.Button.Toggle" />
+
+    <style name="BaseAutoCompleteTextViewStyle" parent="@android:style/Widget.AutoCompleteTextView" />
+
+    <style name="BaseAppTheme" parent="@android:style/Theme.Light.NoTitleBar" />
+
+    <style name="AppTheme" parent="@style/BaseAppTheme">
+        <item name="android:buttonStyle">@style/BaseButtonStyle</item>
+        <item name="android:buttonStyleToggle">@style/BaseToggleButtonStyle</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:autoCompleteTextViewStyle">@style/BaseAutoCompleteTextViewStyle</item>
+        <item name="android:editTextStyle">@style/BaseEditTextStyle</item>
+        <item name="android:listViewStyle">@style/BaseListViewStyle</item>
+        <item name="android:radioButtonStyle">@style/BaseRadioButtonStyle</item>
+        <item name="android:textViewStyle">@style/BaseTextViewStyle</item>
+        <item name="android:fadingEdge">none</item>
+        <item name="android:fadingEdgeLength">0.0dip</item>
+    </style>
+    <style name="BaseListViewStyle" parent="@android:style/Widget.ListView">
+    </style>
+
+
+    <style name="NavPage">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@color/navpage</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+    </style>
+
+
+    <style name="CCPFontTitleInList">
+        <item name="android:textSize">@dimen/NormalTextSize</item>
+        <item name="android:textColor">@color/normal_text_color</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="CCPFontTipInList">
+        <item name="android:textSize">@dimen/HintTextSize</item>
+        <item name="android:textColor">@color/hint_text_color</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="ChattingUIContent">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingLeft">@dimen/SmallPadding</item>
+        <item name="android:paddingRight">@dimen/SmallPadding</item>
+        <item name="android:paddingBottom">@dimen/NormalPadding</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="ChattingUISenderText">
+        <item name="android:textSize">@dimen/SmallestTextSize</item>
+        <item name="android:textColor">#ffaaaaaa</item>
+        <item name="android:gravity">left|center</item>
+        <item name="android:paddingLeft">7.0dip</item>
+        <item name="android:paddingRight">7.0dip</item>
+        <item name="android:paddingBottom">1.5dip</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">0.0dip</item>
+        <item name="android:maxWidth">240.0dip</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="ChattingUIText">
+        <item name="android:textSize">@dimen/NormalTextSize</item>
+        <item name="android:textColor">@color/normal_text_color</item>
+        <item name="android:gravity">left|center</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxWidth">240.0dip</item>
+        <item name="android:minHeight">15.0dip</item>
+        <item name="android:lineSpacingExtra">2.0dip</item>
+    </style>
+
+    <style name="ChattingUIAvatarMaskFrom">
+        <item name="android:layout_width">52.0dip</item>
+        <item name="android:layout_height">50.0dip</item>
+        <item name="android:layout_marginRight">1.0dip</item>
+    </style>
+
+    <style name="ChattingUIAvatarMaskTo">
+        <item name="android:layout_width">52.0dip</item>
+        <item name="android:layout_height">50.0dip</item>
+        <item name="android:layout_marginLeft">1.0dip</item>
+    </style>
+
+    <style name="ChattingUIState">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">@dimen/SmallPadding</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="ChattingUIVoiceLength">
+        <item name="android:textSize">@dimen/HintTextSize</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/lightgrey</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/SmallPadding</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="ChattingItemSourceTextView">
+        <item name="android:textSize">11.0dip</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/SmallPadding</item>
+        <item name="android:layout_marginTop">@dimen/SmallPadding</item>
+        <item name="android:drawablePadding">3.0dip</item>
+    </style>
+
+    <style name="ChattingUISplit">
+        <item name="android:textSize">12.0dip</item>
+        <item name="android:textColor">@color/lightgrey</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@null</item>
+        <item name="android:paddingTop">11.0dip</item>
+        <item name="android:paddingBottom">6.0dip</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/NormalPadding</item>
+        <item name="android:layout_marginBottom">@dimen/SmallPadding</item>
+    </style>
+
+    <style name="CCPFooter">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">49.0dip</item>
+    </style>
+
+    <style name="ChattingUIWordCount">
+        <item name="android:textSize">13.0dip</item>
+        <item name="android:textColor">#ff000000</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="app_grid_item_name_font">
+        <item name="android:textSize">12.0dip</item>
+    </style>
+
+    <style name="CCPFormInputView" parent="@style/CCPLineEditText">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">@dimen/SmallListHeight</item>
+    </style>
+
+    <style name="CCPEditText">
+        <item name="android:textSize">@dimen/NormalTextSize</item>
+        <item name="android:textColor">@color/normal_text_color</item>
+        <item name="android:textColorHint">@color/hint_color_white_bg</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@drawable/edittext_bg_selector</item>
+        <item name="android:paddingTop">@dimen/BasicPaddingSize</item>
+        <item name="android:paddingBottom">@dimen/BasicPaddingSize</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/InputEditTextMinHeight</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="CCPFormInputEditText" parent="@style/CCPLineEditText">
+        <item name="android:textColorHint">@color/form_hint_text_color</item>
+        <item name="android:background">@null</item>
+        <item name="android:layout_marginLeft">@dimen/LittlePadding</item>
+    </style>
+    <style name="primary_text_appearance">
+        <item name="android:textSize">@dimen/primary_text_size</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CCPLineEditText" parent="@style/CCPEditText">
+        <item name="android:layout_width">fill_parent</item>
+    </style>
+    <style name="CCPFormInputTitleTextView" parent="@style/CCPLineEditText">
+        <item name="android:textSize">@dimen/NormalTextSize</item>
+        <item name="android:textColor">@color/normal_text_color</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@null</item>
+        <item name="android:layout_width">@dimen/FixedTitleWidth</item>
+        <item name="android:layout_height">fill_parent</item>
+    </style>
+
+    <style name="CCPFormInputEditPass" parent="@style/CCPLineEditPass">
+        <item name="android:textColorHint">@color/form_hint_text_color</item>
+        <item name="android:background">@null</item>
+        <item name="android:layout_marginLeft">6.0dip</item>
+    </style>
+
+    <style name="CCPLineEditPass" parent="@style/CCPLineEditText">
+        <item name="android:password">true</item>
+        <item name="android:inputType">textPassword</item>
+    </style>
+
+    <style name="notice_statusbar_appearance" parent="@style/primary_text_appearance">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">27dip</item>
+        <item name="android:background">#55BC75</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">@dimen/NormalPadding</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <style name="CCPList">
+        <item name="android:scrollbars">none</item>
+        <item name="android:fadingEdge">none</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:listSelector">@color/transparent</item>
+        <item name="android:divider">@color/list_devider_color</item>
+        <item name="android:dividerHeight">0.0px</item>
+    </style>
+    <style name="CCPListItem">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@drawable/comm_list_item_selector</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">@dimen/NormalListHeight</item>
+        <item name="android:minHeight">@dimen/NormalListHeight</item>
+    </style>
+    <style name="CCPGroupListItem" parent="@style/CCPListItem">
+        <item name="android:paddingLeft">@dimen/SmallPadding</item>
+        <item name="android:paddingRight">@dimen/SmallPadding</item>
+    </style>
+    <style name="style_topbar_textview_shadow">
+        <item name="android:shadowColor">#bf000000</item>
+        <item name="android:shadowDy">-2.0</item>
+        <item name="android:shadowRadius">1.0</item>
+    </style>
+    <style name="CCPScroll">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">0.0dip</item>
+        <item name="android:layout_weight">1.0</item>
+    </style>
+    <style name="CCPBody">
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingLeft">@dimen/LargePadding</item>
+        <item name="android:paddingTop">@dimen/LargerPadding</item>
+        <item name="android:paddingRight">@dimen/LargePadding</item>
+        <item name="android:paddingBottom">@dimen/LargePadding</item>
+        <item name="android:fadingEdge">none</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_weight">1.0</item>
+    </style>
+    <style name="settings_item_layout_single">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/SmallListHeight</item>
+    </style>
+    <style name="Title_category">
+        <item name="android:paddingLeft">@dimen/SmallPadding</item>
+        <item name="android:paddingRight">@dimen/SmallPadding</item>
+        <item name="android:gravity">left|center</item>
+        <item name="android:textColor">@color/hint_text_color</item>
+        <item name="android:textSize">@dimen/HintTextSize</item>
+    </style>
+    <style name="BaseDialog" parent="@android:style/Theme.Dialog" />
+    <style name="ShadowedText">
+        <item name="android:shadowDx">0.0</item>
+        <item name="android:shadowDy">-1.0</item>
+        <item name="android:shadowRadius">1.0</item>
+    </style>
+    <style name="ShadowedText.Light" parent="@style/ShadowedText">
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:shadowColor">#ff555555</item>
+    </style>
+    <style name="DialogTitle" parent="@style/ShadowedText">
+        <item name="android:textColor">@color/blue</item>
+    </style>
+    <style name="Style_Scrollable">
+        <item name="android:fadingEdge">none</item>
+        <item name="android:scrollingCache">false</item>
+        <item name="android:cacheColorHint">#00000000</item>
+        <item name="android:overScrollMode">never</item>
+    </style>
+    <style name="CCPTheme.Holo.Transparent" parent="@style/AppTheme">
+        <item name="android:windowBackground">@*android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+    <style name="dialog" parent="@style/base_dialog">
+        <item name="android:backgroundDimAmount">0.8</item>
+        <!-- <item name="android:windowAnimationStyle">@style/DialogAnimatio</item> -->
+    </style>
+    <style name="base_dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+</resources>

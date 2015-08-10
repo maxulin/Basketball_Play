@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:background="#26a4de"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:gravity="center_horizontal|center_vertical"
+             >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/logo" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="2"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/login"
+                android:layout_width="130dp"
+                android:layout_height="50dp"
+                android:layout_gravity="left"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:background="#ffffff"
+                android:text="登录"
+                android:textColor="#0b7cb5" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:alpha="0" />
+
+            <Button
+                android:id="@+id/regist"
+                android:layout_width="130dp"
+                android:layout_height="50dp"
+                android:layout_gravity="right"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:background="#80c0ed"
+                android:text="注册"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:background="#ffffff"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:paddingBottom="20dp"
+                android:paddingTop="20dp"
+                android:text="使用以下社交工具快速登录"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="*"
+            android:padding="10dp"
+            >
+			<TableRow >
+			    <LinearLayout
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" 
+                >
+
+                <ImageView
+                    android:id="@+id/weixin"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:src="@drawable/weixin" />
+                <TextView 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="微信登录"
+                    android:gravity="center_horizontal"
+                    android:textSize="10sp"
+                    android:textColor="#000000"
+                    android:paddingTop="5dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_column="1" >
+
+                <ImageView
+                    android:id="@+id/sina"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:src="@drawable/sina" />
+                <TextView 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="微博登录"
+                    android:gravity="center_horizontal"
+                    android:textSize="10sp"
+                    android:textColor="#000000"
+                    android:paddingTop="5dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/qq"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:src="@drawable/qq" />
+                <TextView 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="QQ登录"
+                    android:gravity="center_horizontal"
+                    android:textSize="10sp"
+                    android:textColor="#000000"
+                    android:paddingTop="5dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/douban"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:src="@drawable/douban" />
+                <TextView 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="豆瓣登录"
+                    android:gravity="center_horizontal"
+                    android:textSize="10sp"
+                    android:textColor="#000000"
+                    android:paddingTop="5dp"
+                    />
+            </LinearLayout>
+			</TableRow>
+            
+        </TableLayout>
+    </LinearLayout>
+
+</LinearLayout>
