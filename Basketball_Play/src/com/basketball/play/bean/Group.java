@@ -16,6 +16,7 @@ public class Group extends BmobObject {
 	private BmobRelation group_member;
 	private UserBean group_owner;
 	private Site site;
+	private Integer group_peoplecount;
 	public String getGroup_name() {
 		return group_name;
 	}
@@ -51,6 +52,12 @@ public class Group extends BmobObject {
 	}
 	public void setGroup_owner(UserBean group_owner) {
 		this.group_owner = group_owner;
+	}
+	public Integer getGroup_peoplecount() {
+		return group_peoplecount;
+	}
+	public void setGroup_peoplecount(Integer group_peoplecount) {
+		this.group_peoplecount = group_peoplecount;
 	}
 	
 	
