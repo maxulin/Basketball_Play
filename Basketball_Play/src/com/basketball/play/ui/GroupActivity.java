@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.listener.GetListener;
 import cn.bmob.v3.listener.SaveListener;
 
@@ -14,13 +15,17 @@ import com.basketball.play.R;
 import com.basketball.play.bean.Group;
 import com.basketball.play.bean.Site;
 import com.basketball.play.bean.UserBean;
+import com.basketball.play.util.ImageUtils;
 import com.basketball.play.util.PhotoPickUtil;
 import com.basketball.play.util.PhotoPickUtil.OnPhotoPickedlistener;
+import com.basketball.play.view.CircularImage;
 import com.bmob.BTPFileResponse;
 import com.bmob.BmobProFile;
 import com.bmob.btp.callback.UploadListener;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,7 +43,7 @@ import android.widget.LinearLayout;
 public class GroupActivity extends BaseActivity {
 	private EditText group_name;
 	private EditText group_content;
-	private ImageView group_img;
+	private CircularImage group_img;
 	private static final String IMAGE_FILE_LOCATION = "file:///sdcard/group_avator.jpg";
 	private Uri imageUri;
 	private String group_img_sd;
@@ -46,7 +51,6 @@ public class GroupActivity extends BaseActivity {
 	private String upload_group_img;
 	private Site site = new Site();
 	private LinearLayout layout ;
-	PhotoPickUtil pickUtil ;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,24 +79,15 @@ public class GroupActivity extends BaseActivity {
 	private void initView(){
 		group_name = (EditText) findViewById(R.id.group_name);
 		group_content = (EditText) findViewById(R.id.group_content);
-		group_img = (ImageView) findViewById(R.id.group_img);
+		group_img = (CircularImage) findViewById(R.id.group_img);
 		group_img.setOnClickListener(ocl);
 		group_commit = (Button) findViewById(R.id.group_commit);
 		group_commit.setOnClickListener(ocl);
 		layout = (LinearLayout) findViewById(R.id.add_group_img);
 		layout.setOnClickListener(ocl);
 		imageUri = Uri.parse(IMAGE_FILE_LOCATION);
-		pickUtil = new PhotoPickUtil(this, photoPickedlistener);
 	}
 	
-	OnPhotoPickedlistener photoPickedlistener = new OnPhotoPickedlistener() {
-		
-		@Override
-		public void photoPicked(String path, Bitmap bmp) {
-			// TODO Auto-generated method stub
-			
-		}
-	};
 	
 	ProgressDialog dialog =null;
 	OnClickListener ocl = new OnClickListener() {
@@ -104,9 +99,7 @@ public class GroupActivity extends BaseActivity {
 				intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
 				startActivityForResult(intent, 0);
 			}if(arg0.getId()==R.id.add_group_img){
-				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//action is capture
-				intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-				startActivityForResult(intent, 0);
+				showImagePickDialog();
 			}
 			else{
 				if(group_name.getText().toString()==null || group_name.getText().toString().equals("")){
@@ -121,9 +114,9 @@ public class GroupActivity extends BaseActivity {
 					ShowToast("请选择群组头像");
 					return;
 				}
-				dialog = new ProgressDialog(getApplicationContext());
+				dialog = new ProgressDialog(GroupActivity.this);
 				dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);                 
-				dialog.setTitle("正在创建");
+				dialog.setMessage("正在上传数据");
 				dialog.setIndeterminate(false);               
 				dialog.setCancelable(true);       
 				dialog.setCanceledOnTouchOutside(false);  
@@ -158,10 +151,14 @@ public class GroupActivity extends BaseActivity {
 	
 	private void addGroup(String upload_group_img){
 		Group group = new Group();
+		BmobRelation relation = new BmobRelation();
+		relation.add(userManager.getCurrentUser(UserBean.class));
 		group.setGroup_img_address(upload_group_img);
 		group.setGroup_name(group_name.getText().toString());
 		group.setGroup_content(group_content.getText().toString());
 		group.setGroup_owner(userManager.getCurrentUser(UserBean.class));
+		group.setGroup_member(relation);
+		group.setGroup_peoplecount(1);
 		group.setSite(site);
 		group.save(getApplicationContext(), new SaveListener() {
 			
@@ -169,7 +166,8 @@ public class GroupActivity extends BaseActivity {
 			public void onSuccess() {
 				ShowToast("添加成功");
 				dialog.dismiss();
-				
+				GroupActivity.this.setResult(0,null);
+				GroupActivity.this.finish();
 			}
 			
 			@Override
@@ -181,17 +179,73 @@ public class GroupActivity extends BaseActivity {
 	}
 	
 	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
-		if(arg0 == 0){
-			cropImageUri(imageUri, 100, 100, 3);
+
+		if (arg1 == RESULT_CANCELED) {
+			return;
 		}
-		if(arg0 == 3){
-			if(imageUri != null){
-				Bitmap bitmap = decodeUriAsBitmap(imageUri);
-				group_img.setImageBitmap(bitmap);
-				saveMyBitmap(bitmap,"site_img");
-			}  
+		
+		switch (arg0) {
+		// 拍照获取图片
+		case ImageUtils.GET_IMAGE_BY_CAMERA:
+			// uri传入与否影响图片获取方式,以下二选一
+			// 方式一,自定义Uri(ImageUtils.imageUriFromCamera),用于保存拍照后图片地址
+			if(ImageUtils.imageUriFromCamera != null) {
+				// 可以直接显示图片,或者进行其他处理(如压缩或裁剪等)
+//				iv.setImageURI(ImageUtils.imageUriFromCamera);
+				
+				// 对图片进行裁剪
+				ImageUtils.cropImage(this, ImageUtils.imageUriFromCamera);
+				break;
+			}
+			
+			break;
+		// 手机相册获取图片
+		case ImageUtils.GET_IMAGE_FROM_PHONE:
+			if(arg2 != null && arg2.getData() != null) {
+				// 可以直接显示图片,或者进行其他处理(如压缩或裁剪等)
+				// iv.setImageURI(data.getData());
+				
+				// 对图片进行裁剪
+				ImageUtils.cropImage(this, arg2.getData());
+			}
+			break;
+		// 裁剪图片后结果
+		case ImageUtils.CROP_IMAGE:
+			if(ImageUtils.cropImageUri != null) {
+				// 可以直接显示图片,或者进行其他处理(如压缩等)
+				group_img.setImageURI(ImageUtils.cropImageUri);
+				Bitmap bitmap = decodeUriAsBitmap(ImageUtils.cropImageUri);
+				saveMyBitmap(bitmap, "group_avator");
+			}
+			break;
+		default:
+			break;
 		}
+	
 	};
+	
+	public void showImagePickDialog() {
+		String title = "获取图片方式";
+		String[] choices = new String[]{"拍照", "从手机中选择"};
+		
+		new AlertDialog.Builder(this)
+			.setTitle(title)
+			.setItems(choices, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+					switch (which) {
+					case 0:
+						ImageUtils.openCameraImage(GroupActivity.this);
+						break;
+					case 1:
+						ImageUtils.openLocalImage(GroupActivity.this);
+						break;
+					}
+				}
+			})
+			.setNegativeButton("返回", null)
+			.show();
+	}
 	
 	/**
 	 * 裁剪图片方法

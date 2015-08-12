@@ -1,10 +1,13 @@
 package com.basketball.play.ui;
 
+import java.util.List;
+
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.GetListener;
 
 import com.basketball.play.R;
-import com.basketball.play.ResideMenuDemo.MainActivity;
+import com.basketball.play.bean.Group;
 import com.basketball.play.bean.Site;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -17,9 +20,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class SiteContentActivity extends BaseActivity {
@@ -29,6 +36,11 @@ public class SiteContentActivity extends BaseActivity {
 	private ImageLoader imageLoader;
 	private DisplayImageOptions options;
 	private ImageView add_group;
+	private ListView group_list;
+	private List<Group> list;
+	private Context context;
+	private MyBaseAdapter adapter;
+	private Site this_site;
 	Intent intent;
 	
 	@Override
@@ -38,6 +50,7 @@ public class SiteContentActivity extends BaseActivity {
 		setContentView(R.layout.site_content_activity);
 		initView();
 		intent = getIntent();
+		context = this;
 		String obj_id = intent.getStringExtra("obj_id");
 		BmobQuery<Site> query = new BmobQuery<Site>();
 		query.getObject(this, obj_id, new GetListener<Site>() {
@@ -47,6 +60,8 @@ public class SiteContentActivity extends BaseActivity {
 		    	imageLoader.displayImage(object.getImg_address(), site_image, options);
 		    	site_address.setText(object.getSite_address());
 		    	site_name.setText(object.getSite_name());
+		    	this_site = object;
+		    	queryGroup(object);
 		    }
 
 		    @Override
@@ -54,6 +69,29 @@ public class SiteContentActivity extends BaseActivity {
 		    	
 		    }
 
+		});
+		
+	}
+	
+	private void queryGroup(Site site){
+		BmobQuery<Group> queryGroup = new BmobQuery<Group>();
+		queryGroup.addWhereEqualTo("site", site);
+		queryGroup.setLimit(30);
+		queryGroup.findObjects(this, new FindListener<Group>() {
+			
+			@Override
+			public void onSuccess(List<Group> arg0) {
+				list = arg0;
+				adapter = new MyBaseAdapter(context, arg0);
+				group_list.setAdapter(adapter);
+				
+			}
+			
+			@Override
+			public void onError(int arg0, String arg1) {
+				// TODO Auto-generated method stub
+				
+			}
 		});
 	}
 	
@@ -78,7 +116,7 @@ public class SiteContentActivity extends BaseActivity {
 	
 	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
 		if(arg0==0){
-			
+			queryGroup(this_site);
 		}
 	};
 	
@@ -88,7 +126,7 @@ public class SiteContentActivity extends BaseActivity {
 		site_address = (TextView) findViewById(R.id.site_content_address);
 		add_group = (ImageView) findViewById(R.id.add_group);
 		add_group.setOnClickListener(ocl);
-		
+		group_list = (ListView) findViewById(R.id.site_group_list);
 		imageLoader = ImageLoader.getInstance();
 		options = new DisplayImageOptions.Builder()
 		.showImageOnLoading(null)//加载过程中显示的图片
@@ -97,5 +135,53 @@ public class SiteContentActivity extends BaseActivity {
 		.cacheInMemory(true).cacheOnDisc(true).considerExifParams(true)
 		.bitmapConfig(Bitmap.Config.RGB_565).displayer(new FadeInBitmapDisplayer(388)).build();
 	}
+	
+	public class MyBaseAdapter extends BaseAdapter{
+		private Context mContext;
+		private LayoutInflater mInflater;
+		private List<Group> mlist;
+		
+		
+		public MyBaseAdapter(Context context, List<Group> list) {
+			this.mInflater = LayoutInflater.from(context);
+			this.mContext = context;
+			this.mlist = list;
+		}
+
+		@Override
+		public int getCount() {
+			// TODO Auto-generated method stub
+			return mlist.size();
+		}
+
+		@Override
+		public Object getItem(int arg0) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public long getItemId(int arg0) {
+			// TODO Auto-generated method stub
+			return arg0;
+		}
+
+		@Override
+		public View getView(int arg0, View arg1, ViewGroup arg2) {
+			arg1 = mInflater.inflate(R.layout.site_grouplist_item, null);
+			ImageView group_img = (ImageView) arg1.findViewById(R.id.site_group_img);
+			imageLoader.displayImage(mlist.get(arg0).getGroup_img_address()
+					, group_img, options);
+			TextView group_name = (TextView) arg1.findViewById(R.id.site_group_name);
+			group_name.setText(mlist.get(arg0).getGroup_name());
+			TextView group_content = (TextView) arg1.findViewById(R.id.site_group_content);
+			group_content.setText(mlist.get(arg0).getGroup_content());
+			TextView group_peopleCount = (TextView) arg1.findViewById(R.id.site_group_peoplecount);
+			group_peopleCount.setText(mlist.get(arg0).getGroup_peoplecount()+"/50");
+			return arg1;
+		}
+		
+	}
+	
 	
 }
