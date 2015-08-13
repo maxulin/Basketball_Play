@@ -77,6 +77,10 @@
             android:name="com.basketball.play.ui.GroupActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar" >
         </activity>
+        <activity
+            android:name="com.basketball.play.ui.GroupContentActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar" >
+        </activity>
         <activity android:name="com.basketball.play.ResideMenuDemo.SettingActivity" >
         </activity>
 
