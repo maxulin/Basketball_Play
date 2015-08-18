@@ -24,7 +24,7 @@
 	<!-- 这个权限用于访问GPS定位-->
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
     <application
-        android:name="com.basketball.play.ui.CustomApplcation"
+        android:name="com.basketball.play.CustomApplcation"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name" >
@@ -79,6 +79,14 @@
         </activity>
         <activity
             android:name="com.basketball.play.ui.GroupContentActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="com.basketball.play.ui.ChatActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="com.basketball.play.ui.LocationActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar" >
         </activity>
         <activity android:name="com.basketball.play.ResideMenuDemo.SettingActivity" >

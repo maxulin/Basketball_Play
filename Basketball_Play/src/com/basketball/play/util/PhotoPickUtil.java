@@ -16,6 +16,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.MediaStore.MediaColumns;
 import android.support.v4.app.Fragment;
 import android.view.ContextThemeWrapper;
 import android.widget.ArrayAdapter;
@@ -157,6 +158,7 @@ public class PhotoPickUtil {
 		builder.setTitle("选择图片");
 		builder.setSingleChoiceItems(adapter, -1,
 				new DialogInterface.OnClickListener() {
+					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						switch (which) {
@@ -229,6 +231,7 @@ public class PhotoPickUtil {
 		builder.setTitle("选择图片");
 		builder.setSingleChoiceItems(adapter, -1,
 				new DialogInterface.OnClickListener() {
+					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						switch (which) {
@@ -358,7 +361,7 @@ public class PhotoPickUtil {
 	private String getGalleryImgPath(Uri photoUri) {
 		// 这里开始的第二部分，获取图片的路径：
 
-		String[] proj = { MediaStore.Images.Media.DATA };
+		String[] proj = { MediaColumns.DATA };
 
 		// 好像是android多媒体数据库的封装接口，具体的看Android文档
 		Cursor cursor = activityContext.managedQuery(photoUri, proj, null,
@@ -366,7 +369,7 @@ public class PhotoPickUtil {
 
 		// 按我个人理解 这个是获得用户选择的图片的索引值
 		int column_index = cursor
-				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+				.getColumnIndexOrThrow(MediaColumns.DATA);
 
 		// 将光标移至开头 ，这个很重要，不小心很容易引起越界
 		cursor.moveToFirst();

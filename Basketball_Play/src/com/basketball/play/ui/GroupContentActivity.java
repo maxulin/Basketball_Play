@@ -1,6 +1,10 @@
 package com.basketball.play.ui;
 
+import java.util.List;
+
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobPointer;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.GetListener;
 
 import com.basketball.play.R;
@@ -11,8 +15,11 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,6 +36,7 @@ public class GroupContentActivity extends BaseActivity {
 	private Button group_button_add;
 	private ImageLoader imageLoader;
 	private DisplayImageOptions options;
+	Group group;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,7 @@ public class GroupContentActivity extends BaseActivity {
 			
 			@Override
 			public void onSuccess(Group arg0) {
+				group = arg0;
 				setMessage(arg0);
 			}
 		});
@@ -61,6 +70,7 @@ public class GroupContentActivity extends BaseActivity {
 		group_img_large =  (ImageView) findViewById(R.id.group_img_large);
 		group_img_master =  (ImageView) findViewById(R.id.group_img_master);
 		group_button_add = (Button) findViewById(R.id.group_button_add);
+		group_button_add.setOnClickListener(oncl);
 		imageLoader = ImageLoader.getInstance();
 		options = new DisplayImageOptions.Builder()
 		.showImageOnLoading(null)//加载过程中显示的图片
@@ -69,6 +79,18 @@ public class GroupContentActivity extends BaseActivity {
 		.cacheInMemory(true).cacheOnDisc(true).considerExifParams(true)
 		.bitmapConfig(Bitmap.Config.RGB_565).displayer(new FadeInBitmapDisplayer(388)).build();
 	}
+	
+	OnClickListener oncl = new OnClickListener() {
+		
+		@Override
+		public void onClick(View arg0) {
+			if(group_button_add.getText().equals("发消息")){
+				Intent intent = new Intent(GroupContentActivity.this,ChatActivity.class);
+				intent.putExtra("group", group);
+				startActivity(intent);
+			}
+		}
+	};
 	
 	private void setMessage(Group group){
 		BmobQuery<UserBean> query_u = new BmobQuery<UserBean>();
@@ -102,6 +124,32 @@ public class GroupContentActivity extends BaseActivity {
 				
 			}
 			
+		});
+		BmobQuery<UserBean> query_members = new BmobQuery<UserBean>();
+		Group group2 = new Group();
+		group2.setObjectId(getIntent().getStringExtra("obj_id"));
+		query_members.addWhereRelatedTo("group_member", new BmobPointer(group2));
+		query_members.findObjects(this, new FindListener<UserBean>() {
+			
+			@Override
+			public void onSuccess(List<UserBean> arg0) {
+				int j = 0;
+				for(int i=0;i<arg0.size();i++){
+					if(arg0.get(i).getObjectId().equals(userManager.getCurrentUser().getObjectId())){
+						group_button_add.setText("发消息");
+						j=1;
+					}
+				}
+				if(j==0){
+					group_button_add.setText("+加入群组");
+				}
+			}
+			
+			@Override
+			public void onError(int arg0, String arg1) {
+				// TODO Auto-generated method stub
+				
+			}
 		});
 		group_text_content.setText(group.getGroup_content());
 		group_text_name.setText(group.getGroup_name());

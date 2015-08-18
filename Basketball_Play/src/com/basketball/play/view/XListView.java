@@ -93,6 +93,7 @@ public class XListView extends ListView implements OnScrollListener {
 		// init header height
 		mHeaderView.getViewTreeObserver().addOnGlobalLayoutListener(
 				new OnGlobalLayoutListener() {
+					@Override
 					public void onGlobalLayout() {
 						mHeaderViewHeight = mHeaderViewContent.getHeight();
 						getViewTreeObserver()
@@ -141,6 +142,7 @@ public class XListView extends ListView implements OnScrollListener {
 			mFooterView.setState(XListViewFooter.STATE_NORMAL);
 			// both "pull up" and "click" will invoke load more.
 			mFooterView.setOnClickListener(new OnClickListener() {
+				@Override
 				public void onClick(View v) {
 					startLoadMore();
 				}
@@ -324,12 +326,14 @@ public class XListView extends ListView implements OnScrollListener {
 		mScrollListener = l;
 	}
 
+	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		if (mScrollListener != null) {
 			mScrollListener.onScrollStateChanged(view, scrollState);
 		}
 	}
 
+	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 		// send to user's listener
@@ -339,7 +343,16 @@ public class XListView extends ListView implements OnScrollListener {
 					totalItemCount);
 		}
 	}
-
+	
+	public void pullRefreshing() {
+		if (!mEnablePullRefresh) {
+			return;
+		}
+		mHeaderView.setVisiableHeight(mHeaderViewHeight);
+		mPullRefreshing = true;
+		mHeaderView.setState(XListViewHeader.STATE_REFRESHING);
+	}
+	
 	public void setXListViewListener(IXListViewListener l) {
 		mListViewListener = l;
 	}

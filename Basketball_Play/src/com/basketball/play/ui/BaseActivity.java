@@ -1,6 +1,15 @@
 package com.basketball.play.ui;
+import com.basketball.play.CustomApplcation;
+import com.basketball.play.R;
 import com.basketball.play.bean.UserBean;
+import com.basketball.play.view.HeaderLayout;
+import com.basketball.play.view.HeaderLayout.HeaderStyle;
+import com.basketball.play.view.HeaderLayout.onLeftImageButtonClickListener;
+import com.basketball.play.view.HeaderLayout.onRightImageButtonClickListener;
+import com.basketball.play.view.dialog.DialogTips;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -22,6 +31,7 @@ public class BaseActivity extends FragmentActivity {
 
 	protected BmobUserManager userManager;
 	BmobChatManager manager;
+	protected HeaderLayout mHeaderLayout;
 	
 	CustomApplcation mApplication;
 	
@@ -135,4 +145,65 @@ public class BaseActivity extends FragmentActivity {
 			}
 		}
 	}
+	
+	/**
+	 * 初始化标题栏-带左右按钮
+	 * @return void
+	 * @throws
+	 */
+	public void initTopBarForBoth(String titleName, int rightDrawableId,String text,
+			onRightImageButtonClickListener listener) {
+		mHeaderLayout = (HeaderLayout)findViewById(R.id.common_actionbar);
+		mHeaderLayout.init(HeaderStyle.TITLE_DOUBLE_IMAGEBUTTON);
+		mHeaderLayout.setTitleAndLeftImageButton(titleName,
+				R.drawable.base_action_bar_back_bg_selector,
+				new OnLeftButtonClickListener());
+		mHeaderLayout.setTitleAndRightButton(titleName, rightDrawableId,text,
+				listener);
+	}
+	
+	/**
+	 * 只有左边按钮和Title initTopBarLayout
+	 * 
+	 * @throws
+	 */
+	public void initTopBarForLeft(String titleName) {
+		mHeaderLayout = (HeaderLayout)findViewById(R.id.common_actionbar);
+		mHeaderLayout.init(HeaderStyle.TITLE_DOUBLE_IMAGEBUTTON);
+		mHeaderLayout.setTitleAndLeftImageButton(titleName,
+				R.drawable.base_action_bar_back_bg_selector,
+				new OnLeftButtonClickListener());
+	}
+	
+	// 左边按钮的点击事件
+		public class OnLeftButtonClickListener implements
+				onLeftImageButtonClickListener {
+
+			@Override
+			public void onClick() {
+				finish();
+			}
+		}
+		
+		/** 显示下线的对话框
+		  * showOfflineDialog
+		  * @return void
+		  * @throws
+		  */
+		public void showOfflineDialog(final Context context) {
+			DialogTips dialog = new DialogTips(this,"您的账号已在其他设备上登录!", "重新登录");
+			// 设置成功事件
+			dialog.SetOnSuccessListener(new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialogInterface, int userId) {
+					CustomApplcation.getInstance().logout();
+					startActivity(new Intent(context, LoginActivity.class));
+					finish();
+					dialogInterface.dismiss();
+				}
+			});
+			// 显示确认对话框
+			dialog.show();
+			dialog = null;
+		}
 }

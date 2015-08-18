@@ -53,4 +53,13 @@
     <item name="site_distance" type="id" />
     <item name="group_commit" type="id" />
     <item name="add_group_img" type="id" />
+    <item name="group_button_add" type="id" />
+    <item name="group_text_master" type="id" />
+    <item name="group_img_master" type="id" />
+    <item name="group_text_content" type="id" />
+    <item name="group_text_location" type="id" />
+    <item name="group_text_sitename" type="id" />
+    <item name="group_text_name" type="id" />
+    <item name="group_img_large" type="id" />
+    <item name="group_text_peoplecount" type="id" />
 </resources>

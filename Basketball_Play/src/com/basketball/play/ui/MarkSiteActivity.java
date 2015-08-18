@@ -4,15 +4,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.datatype.BmobGeoPoint;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UpdateListener;
 
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
@@ -23,10 +22,10 @@ import com.basketball.play.bean.UserBean;
 import com.basketball.play.util.PhotoPickUtil;
 import com.basketball.play.util.PhotoPickUtil.OnPhotoPickedlistener;
 import com.basketball.play.view.FlowLayout;
+import com.basketball.play.CustomApplcation;
 import com.basketball.play.R;
 import com.bmob.BTPFileResponse;
 import com.bmob.BmobProFile;
-import com.bmob.btp.callback.ThumbnailListener;
 import com.bmob.btp.callback.UploadListener;
 
 import android.annotation.SuppressLint;
@@ -72,7 +71,6 @@ public class MarkSiteActivity extends BaseActivity{
 	private String site_img;
 	private String upload_site_img = "";
 	int j = 0;
-	Site site = new Site();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +90,7 @@ public class MarkSiteActivity extends BaseActivity{
 		@Override
 		public void onClick(View v) {
 			Intent intent = new Intent(MarkSiteActivity.this,LabelActivity.class);
-			intent.putParcelableArrayListExtra("add_labels", (ArrayList<? extends Parcelable>) label_list);
+			intent.putExtra("add_labels",(Serializable)label_list);
 			startActivityForResult(intent, 0);
 		}
 	};
@@ -113,7 +111,7 @@ public class MarkSiteActivity extends BaseActivity{
 	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
 		if(arg0 == 0 && arg1==0){
 			tag_vessel.removeAllViewsInLayout();
-			label_list = arg2.getParcelableArrayListExtra("add_labels");
+			label_list = (List<Label>)arg2.getSerializableExtra("add_labels");
 			for(int i=0;i<label_list.size();i++){
 				AddTag(label_list.get(i).getLabel_name(), i);
 			}
@@ -376,6 +374,7 @@ public class MarkSiteActivity extends BaseActivity{
 	}
 	
 	public void siteCommit(){
+		Site site = new Site();
 		dialog_two = new ProgressDialog(MarkSiteActivity.this);
 		BmobRelation relation = new BmobRelation();
 		site.setImg_address(upload_site_img);
@@ -383,10 +382,8 @@ public class MarkSiteActivity extends BaseActivity{
 		site.setSite_address(address_geo.getText().toString());
 		site.setSite_location(lastPoint);
 		site.setSite_name(site_name.getText().toString());
-		site.setSite_labels(relation);
 		for(int i = 0;i<label_list.size();i++){
 			relation.add(label_list.get(i));
-			
 		}
 		site.setSite_labels(relation);
 		dialog_two.setTitle("上传中...");

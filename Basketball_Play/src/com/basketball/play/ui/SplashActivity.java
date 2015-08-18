@@ -9,6 +9,7 @@ import com.baidu.location.LocationClientOption.LocationMode;
 import com.baidu.mapapi.SDKInitializer;
 import com.basketball.play.ResideMenuDemo.MainActivity;
 import com.basketball.play.config.Config;
+import com.basketball.play.CustomApplcation;
 import com.basketball.play.R;
 
 import android.annotation.SuppressLint;

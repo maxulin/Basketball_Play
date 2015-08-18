@@ -16,8 +16,6 @@ import com.basketball.play.bean.Group;
 import com.basketball.play.bean.Site;
 import com.basketball.play.bean.UserBean;
 import com.basketball.play.util.ImageUtils;
-import com.basketball.play.util.PhotoPickUtil;
-import com.basketball.play.util.PhotoPickUtil.OnPhotoPickedlistener;
 import com.basketball.play.view.CircularImage;
 import com.bmob.BTPFileResponse;
 import com.bmob.BmobProFile;
@@ -37,7 +35,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public class GroupActivity extends BaseActivity {
@@ -178,6 +175,7 @@ public class GroupActivity extends BaseActivity {
 		});
 	}
 	
+	@Override
 	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
 
 		if (arg1 == RESULT_CANCELED) {
@@ -231,6 +229,7 @@ public class GroupActivity extends BaseActivity {
 		new AlertDialog.Builder(this)
 			.setTitle(title)
 			.setItems(choices, new DialogInterface.OnClickListener() {
+				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					dialog.dismiss();
 					switch (which) {

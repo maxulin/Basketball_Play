@@ -20,6 +20,7 @@ public class CircularImage extends MaskedImage {
 		super(paramContext, paramAttributeSet, paramInt);
 	}
 
+	@Override
 	public Bitmap createMask() {
 		int i = getWidth();
 		int j = getHeight();

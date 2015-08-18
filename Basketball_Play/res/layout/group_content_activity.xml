@@ -286,10 +286,10 @@
         android:layout_marginTop="10dp"
         >
         <Button 
+            android:id="@id/group_button_add"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="#03a9f4"
-            android:text="@string/group_button_add"
             android:textColor="@color/white"
             android:layout_gravity="center"
             />

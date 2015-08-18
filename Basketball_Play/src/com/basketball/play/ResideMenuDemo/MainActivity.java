@@ -39,12 +39,12 @@ import com.basketball.play.ResideMenu.ResideMenuItem;
 import com.basketball.play.bean.Site;
 import com.basketball.play.bean.UserBean;
 import com.basketball.play.ui.BaseActivity;
-import com.basketball.play.ui.CustomApplcation;
 import com.basketball.play.ui.MarkSiteActivity;
 import com.basketball.play.ui.SiteContentActivity;
 import com.basketball.play.view.CircularImage;
 import com.basketball.play.view.XListView;
 import com.basketball.play.view.XListView.IXListViewListener;
+import com.basketball.play.CustomApplcation;
 import com.basketball.play.R;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -325,9 +325,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 	private IXListViewListener xListViewListener = new IXListViewListener() {
 
+		@Override
 		public void onRefresh() {
 
 			mHandler.postDelayed(new Runnable() {
+				@Override
 				public void run() {
 					refreshListview();
 					onLoad();
@@ -335,8 +337,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 			}, 3000);
 		}
 
+		@Override
 		public void onLoadMore() {
 			mHandler.postDelayed(new Runnable() {// 这里只是个显示界面的例子而已,正在做的时候应该用post方法
+						@Override
 						public void run() {
 							getmoreList();
 							adapter.notifyDataSetChanged();
@@ -446,6 +450,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 			this.mlist = list;
 		}
 
+		@Override
 		public View getView(final int position, View convertView,
 				ViewGroup parent) {
 			convertView = mInflater.inflate(R.layout.site_list_item, null);
@@ -482,14 +487,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 			return convertView;
 		}
 
+		@Override
 		public long getItemId(int position) {
 			return position;
 		}
 
+		@Override
 		public Object getItem(int position) {
 			return null;
 		}
 
+		@Override
 		public int getCount() {
 			return mlist.size();
 		}

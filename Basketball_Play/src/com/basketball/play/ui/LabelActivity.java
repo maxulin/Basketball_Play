@@ -1,5 +1,6 @@
 package com.basketball.play.ui;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,7 +53,7 @@ public class LabelActivity extends BaseActivity{
 		submit_label.setOnClickListener(ocl);
 		//获取已经添加的标签，arraylist里没有数据的话不添加
 		Intent intent = getIntent();
-		add_labels = intent.getParcelableArrayListExtra("add_labels");
+		add_labels = (List<Label>) intent.getSerializableExtra("add_labels");
 		if(add_labels.size()!=0){
 			for(int i=0;i<add_labels.size();i++){
 				AddTag(add_labels.get(i).getLabel_name(), i);
@@ -170,7 +171,7 @@ public class LabelActivity extends BaseActivity{
 		@Override
 		public void onClick(View v) {
 			Intent intent = getIntent();
-			intent.putParcelableArrayListExtra("add_labels", (ArrayList<? extends Parcelable>) add_labels);
+			intent.putExtra("add_labels",(Serializable)add_labels);
 			LabelActivity.this.setResult(0,intent);
 			LabelActivity.this.finish();
 		}

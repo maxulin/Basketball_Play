@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Images.ImageColumns;
+import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
 
 public class ImageUtils {
@@ -87,9 +89,9 @@ public class ImageUtils {
 		String imageName = timeFormatter.format(new Date(time));
 		// ContentValues是我们希望这条记录被创建时包含的数据信息
 		ContentValues values = new ContentValues(3);
-		values.put(MediaStore.Images.Media.DISPLAY_NAME, imageName);
-		values.put(MediaStore.Images.Media.DATE_TAKEN, time);
-		values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+		values.put(MediaColumns.DISPLAY_NAME, imageName);
+		values.put(ImageColumns.DATE_TAKEN, time);
+		values.put(MediaColumns.MIME_TYPE, "image/jpeg");
 		if (status.equals(Environment.MEDIA_MOUNTED)) {// 判断是否有SD卡,优先使用SD卡存储,当没有SD卡时使用手机存储
 			imageFilePath = context.getContentResolver().insert(
 					MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);

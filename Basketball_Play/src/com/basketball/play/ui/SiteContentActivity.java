@@ -24,10 +24,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class SiteContentActivity extends BaseActivity {
 	private ImageView site_image;
@@ -114,6 +116,7 @@ public class SiteContentActivity extends BaseActivity {
 		}
 	};
 	
+	@Override
 	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
 		if(arg0==0){
 			queryGroup(this_site);
@@ -127,6 +130,7 @@ public class SiteContentActivity extends BaseActivity {
 		add_group = (ImageView) findViewById(R.id.add_group);
 		add_group.setOnClickListener(ocl);
 		group_list = (ListView) findViewById(R.id.site_group_list);
+		group_list.setOnItemClickListener(oicl);
 		imageLoader = ImageLoader.getInstance();
 		options = new DisplayImageOptions.Builder()
 		.showImageOnLoading(null)//加载过程中显示的图片
@@ -183,5 +187,17 @@ public class SiteContentActivity extends BaseActivity {
 		
 	}
 	
+	OnItemClickListener oicl = new OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			String group_id = list.get(position).getObjectId();
+			Intent intent = new Intent(SiteContentActivity.this,
+					GroupContentActivity.class);
+			intent.putExtra("obj_id", group_id);
+			startActivity(intent);
+		}
+	};
 	
 }

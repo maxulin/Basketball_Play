@@ -135,7 +135,7 @@ public class RegistContentActivity extends BaseActivity implements View.OnTouchL
                             datePicker.getDayOfMonth())); 
                     birthday.setText(sb);
                     TimeUtil tu = new TimeUtil();
-                    user.setBirthday(tu.stringToDate(sb.toString(), "yyyy-mm-dd"));
+                    user.setBirthday(TimeUtil.stringToDate(sb.toString(), "yyyy-mm-dd"));
                     dialog.cancel(); 
                 } 
             }); 
