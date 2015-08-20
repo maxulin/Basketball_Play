@@ -3,12 +3,17 @@ package com.basketball.play.ui;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobGeoPoint;
+import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.GetListener;
 
 import com.basketball.play.R;
+import com.basketball.play.ResideMenuDemo.MainActivity;
 import com.basketball.play.bean.Group;
+import com.basketball.play.bean.Label;
 import com.basketball.play.bean.Site;
+import com.basketball.play.view.FlowLayout;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -16,24 +21,29 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class SiteContentActivity extends BaseActivity {
 	private ImageView site_image;
-	private TextView site_name;
+	private TextView site_name,map_view;
 	private TextView site_address;
 	private ImageLoader imageLoader;
 	private DisplayImageOptions options;
@@ -43,6 +53,7 @@ public class SiteContentActivity extends BaseActivity {
 	private Context context;
 	private MyBaseAdapter adapter;
 	private Site this_site;
+	private FlowLayout flowLayout;
 	Intent intent;
 	
 	@Override
@@ -63,6 +74,7 @@ public class SiteContentActivity extends BaseActivity {
 		    	site_address.setText(object.getSite_address());
 		    	site_name.setText(object.getSite_name());
 		    	this_site = object;
+		    	queryLabels(object);
 		    	queryGroup(object);
 		    }
 
@@ -73,6 +85,47 @@ public class SiteContentActivity extends BaseActivity {
 
 		});
 		
+	}
+	
+	private void queryLabels(Site site){
+		BmobQuery<Label> queryLabel = new BmobQuery<Label>();
+		queryLabel.addWhereRelatedTo("site_labels", new BmobPointer(site));
+		queryLabel.findObjects(this, new FindListener<Label>() {
+			
+			@Override
+			public void onSuccess(List<Label> arg0) {
+				for(int i=0;i<arg0.size();i++){
+					AddTag(arg0.get(i).getLabel_name(),i,flowLayout);
+				}
+			}
+			
+			@Override
+			public void onError(int arg0, String arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	}
+	
+	/**
+	 * 添加标签
+	 * @param tag
+	 * @param i
+	 */
+	@SuppressLint("NewApi")
+	public void AddTag(String tag, int i,FlowLayout site_labels) {
+		final TextView mTag = new TextView(SiteContentActivity.this);
+		mTag.setText("  " + tag + "    ");
+		// mTag.setPadding(0, 15, 40, 15);
+		mTag.setGravity(Gravity.CENTER);
+		mTag.setTextSize(12);
+		mTag.setBackground(getResources().getDrawable(R.drawable.mylable));
+		// mTag.setBackgroundColor(getResources().getColor(R.color.black));
+		mTag.setTextColor(Color.BLACK);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 40);
+		params.setMargins(10, 10, 20, 10);
+		site_labels.addView(mTag, i, params);
+
 	}
 	
 	private void queryGroup(Site site){
@@ -110,9 +163,18 @@ public class SiteContentActivity extends BaseActivity {
 		
 		@Override
 		public void onClick(View arg0) {
-			Intent new_intent = new Intent(SiteContentActivity.this,GroupActivity.class);
-			new_intent.putExtra("obj_id", intent.getStringExtra("obj_id"));
-			startActivityForResult(new_intent, 0);
+			if(arg0.getId()==R.id.add_group){
+				Intent new_intent = new Intent(SiteContentActivity.this,GroupActivity.class);
+				new_intent.putExtra("obj_id", intent.getStringExtra("obj_id"));
+				startActivityForResult(new_intent, 0);
+			}
+			if(arg0.getId()==R.id.map_view){
+				Intent new_intent = new Intent(SiteContentActivity.this,MapActivity.class);
+				BmobGeoPoint geo = this_site.getSite_location();
+				new_intent.putExtra("geo_point", geo);
+				startActivity(new_intent);
+			}
+			
 		}
 	};
 	
@@ -131,6 +193,9 @@ public class SiteContentActivity extends BaseActivity {
 		add_group.setOnClickListener(ocl);
 		group_list = (ListView) findViewById(R.id.site_group_list);
 		group_list.setOnItemClickListener(oicl);
+		flowLayout = (FlowLayout) findViewById(R.id.site_content_label);
+		map_view = (TextView) findViewById(R.id.map_view);
+		map_view.setOnClickListener(ocl);
 		imageLoader = ImageLoader.getInstance();
 		options = new DisplayImageOptions.Builder()
 		.showImageOnLoading(null)//加载过程中显示的图片

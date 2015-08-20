@@ -280,7 +280,8 @@ public class ResideMenu extends FrameLayout {
 	 * close the reslide menu;
 	 */
 	public void closeMenu() {
-
+		setScaleDirection(0);
+		
 		isOpened = false;
 		AnimatorSet scaleUp_activity = buildScaleUpAnimation(viewActivity,
 				1.0f, 1.0f);

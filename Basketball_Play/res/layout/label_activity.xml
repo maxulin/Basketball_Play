@@ -2,14 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
     android:background="@color/white"
-    >
-    
+    android:orientation="vertical" >
+
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.7"
+        android:layout_height="50dp"
         android:background="#f6f6f6" >
 
         <Button
@@ -39,55 +37,62 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/check" />
     </RelativeLayout>
-	<TextView 
-	    android:layout_width="match_parent"
-	    android:layout_height="0dp"
-	    android:layout_weight="0.6"
-	    android:text="@string/label_ps"
-	    android:gravity="center_vertical"
-	    android:paddingLeft="10dp"
-	    />
-	    <com.basketball.play.view.FlowLayout 
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:scrollbars="vertical"
-        android:id="@id/tag_vessel"
-        >
-    </com.basketball.play.view.FlowLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.7"
-        android:background="@drawable/linearlayout_border"
+        android:layout_height="match_parent" 
+        android:orientation="vertical"
         >
-        <LinearLayout 
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|center_vertical"
-            android:layout_gravity="center_vertical"
-            >
-            <EditText 
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/label_search"
-            android:background="@drawable/edittext_border"
-            android:gravity="center"
-            />
-            <ImageView 
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/u3"
-                android:layout_marginLeft="5dp"
-                />
+            android:layout_height="20dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="@string/label_ps" />
+
+        <com.basketball.play.view.FlowLayout
+            android:id="@id/tag_vessel"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:scrollbars="vertical" >
+        </com.basketball.play.view.FlowLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/linearlayout_border" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_horizontal|center_vertical" 
+                android:focusable="true"   
+				android:focusableInTouchMode="true"
+                >
+
+                <EditText
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_border"
+                    android:gravity="center"
+                    android:hint="@string/label_search" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/u3" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-    <ListView 
-        	android:id="@id/label_list"
+
+        <ListView
+            android:id="@id/label_list"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="5"
+            android:layout_height="match_parent"
             android:divider="@color/black"
-            android:dividerHeight="0.5px"
-            ></ListView>
+            android:dividerHeight="0.5px" >
+        </ListView>
+    </LinearLayout>
+
 </LinearLayout>

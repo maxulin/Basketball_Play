@@ -62,4 +62,15 @@
     <item name="group_text_name" type="id" />
     <item name="group_img_large" type="id" />
     <item name="group_text_peoplecount" type="id" />
+    <item name="main_group_labels" type="id" />
+    <item name="play_time" type="id" />
+    <item name="user_role" type="id" />
+    <item name="individual_resume" type="id" />
+    <item name="group_count" type="id" />
+    <item name="site_count" type="id" />
+    <item name="user_img_large" type="id" />
+    <item name="user_text_name" type="id" />
+    <item name="user_textv_name" type="id" />
+    <item name="user_info_sex" type="id" />
+    <item name="map_view" type="id" />
 </resources>

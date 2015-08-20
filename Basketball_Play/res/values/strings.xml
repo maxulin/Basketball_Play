@@ -4,7 +4,7 @@
     <string name="regist_content">信息完善</string>
     <string name="mark_site">标记球场</string>
     <string name="site_detail">球场详情</string>
-    <string name="some_label">标记球场</string>
+    <string name="some_label">球场标签</string>
     <string name="nickname">昵称</string>
     <string name="birthday">出生日期</string>
     <string name="role">擅长位置</string>
@@ -69,4 +69,11 @@
     <string name="pop_photo">拍照</string>
     <string name="pop_choose">从手机相册选中</string>
     <string name="network_tips">当前网络不可用,请检查您的网络!</string>
+    <string name="user_message_content">我的资料</string>
+    <string name="play_time">球龄:</string>
+    <string name="individual_resume">个人简介</string>
+    <string name="group_text">群组</string>
+    <string name="site_text">球场</string>
+    <string name="site_map">>>到这里打球</string>
+    <string name="map_content">球场位置</string>
 </resources>

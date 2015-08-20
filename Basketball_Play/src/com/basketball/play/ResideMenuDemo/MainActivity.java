@@ -3,31 +3,39 @@ package com.basketball.play.ResideMenuDemo;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobGeoPoint;
+import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.listener.FindListener;
 
 import com.baidu.location.LocationClient;
@@ -36,12 +44,15 @@ import com.baidu.location.LocationClientOption.LocationMode;
 import com.basketball.play.ResideMenu.ResideMenu;
 import com.basketball.play.ResideMenu.ResideMenuInfo;
 import com.basketball.play.ResideMenu.ResideMenuItem;
+import com.basketball.play.bean.Label;
 import com.basketball.play.bean.Site;
 import com.basketball.play.bean.UserBean;
 import com.basketball.play.ui.BaseActivity;
 import com.basketball.play.ui.MarkSiteActivity;
 import com.basketball.play.ui.SiteContentActivity;
+import com.basketball.play.ui.UserInfoActivity;
 import com.basketball.play.view.CircularImage;
+import com.basketball.play.view.FlowLayout;
 import com.basketball.play.view.XListView;
 import com.basketball.play.view.XListView.IXListViewListener;
 import com.basketball.play.CustomApplcation;
@@ -72,6 +83,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 	private XListView mListView;
 	private List<Site> list;
+	private Map<String,List<Label>> label_list;
 	private Context context;
 	private MyBaseAdapter adapter;
 	private Handler mHandler;
@@ -311,7 +323,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 	private void refreshListview() {
 		initLocClient();
 		refreshList();
-		adapter = new MyBaseAdapter(context, list);
+		adapter = new MyBaseAdapter(context, list,label_list);
 		mListView.setAdapter(adapter);
 	}
 
@@ -364,17 +376,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 			startActivity(intent);
 		}
 	};
-
+	
+	ProgressDialog progress;
+	
 	private void getList() {// 获取数据
 		list = new ArrayList<Site>();
+		label_list = new HashMap<String, List<Label>>();
 		if (CustomApplcation.lastPoint == null) {
 			ShowToast("您的网络太慢啦，请下拉重试或稍等一会再试!");
-			adapter = new MyBaseAdapter(context, list);
+			adapter = new MyBaseAdapter(context, list,label_list);
 			mListView.setAdapter(adapter);
 			return;
 		}
-
-		final ProgressDialog progress = new ProgressDialog(MainActivity.this);
+		progress = new ProgressDialog(MainActivity.this);
+		
 		progress.setMessage("正在加载场地数据");
 		progress.setCanceledOnTouchOutside(false);
 		progress.setCancelable(true);
@@ -389,15 +404,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 			@Override
 			public void onSuccess(List<Site> arg0) {
 				list = arg0;
-				adapter = new MyBaseAdapter(context, list);
-				mListView.setAdapter(adapter);
-
-				progress.dismiss();
+				findLabels(arg0);
+				
 			}
 
 			@Override
 			public void onError(int code, String msg) {
-				adapter = new MyBaseAdapter(context, list);
+				adapter = new MyBaseAdapter(context, list,label_list);
 				mListView.setAdapter(adapter);
 				progress.dismiss();
 				ShowToast("数据获取错误，类型为:" + code + ",原因为" + msg);
@@ -406,6 +419,43 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 		});
 
 	}
+	
+	
+	private void findLabels(final List<Site> sites){
+		BmobQuery<Label> query = new BmobQuery<Label>();
+		Site site = new Site();
+		for(int i=0;i<sites.size();i++){
+			site.setObjectId(sites.get(i).getObjectId());
+			query.addWhereRelatedTo("site_labels", new BmobPointer(site));
+			query.setLimit(3);
+			query.findObjects(this, new FindListener<Label>() {
+				
+				@Override
+				public void onSuccess(List<Label> arg0) {
+					addLabelMap(arg0);
+				}
+				
+				@Override
+				public void onError(int arg0, String arg1) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+		}
+		
+	}
+	int i=0;
+	private void addLabelMap(List<Label> labels){
+		label_list.put(list.get(i).getObjectId(), labels);
+		i++;
+		if(i==list.size()){
+			adapter = new MyBaseAdapter(context, list,label_list);
+			mListView.setAdapter(adapter);
+			progress.dismiss();
+			i=0;
+		}
+	}
+	
 
 	private void refreshList() {// 获取最新的信息
 		BmobQuery<Site> site_query = new BmobQuery<Site>();
@@ -423,7 +473,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 			@Override
 			public void onError(int code, String msg) {
 				ShowToast("数据获取错误，类型为:" + code + ",原因为" + msg);
-				adapter = new MyBaseAdapter(context, list);
+				adapter = new MyBaseAdapter(context, list,label_list);
 				mListView.setAdapter(adapter);
 			}
 
@@ -443,11 +493,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 		private Context mContext;
 		private LayoutInflater mInflater;
 		private List<Site> mlist;
+		private Map<String, List<Label>> llist;
 
-		public MyBaseAdapter(Context context, List<Site> list) {
+		public MyBaseAdapter(Context context, List<Site> list,Map<String, List<Label>> label_list) {
 			this.mInflater = LayoutInflater.from(context);
 			this.mContext = context;
 			this.mlist = list;
+			this.llist = label_list;
 		}
 
 		@Override
@@ -472,7 +524,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 			TextView site_address = (TextView) convertView
 					.findViewById(R.id.site_main_address);
 			site_address.setText(mlist.get(position).getSite_address());
-			TextView content_label = (TextView) findViewById(R.id.site_main_label);
+			
+			FlowLayout site_labels = (FlowLayout) convertView.findViewById(R.id.main_group_labels);
+			List<Label> add_labels = label_list.get(mlist.get(position).getObjectId());
+			for(int i=0;i<add_labels.size();i++){
+				AddTag(add_labels.get(i).getLabel_name(), i,site_labels);
+			}
+			
 			CircularImage user_image = (CircularImage) convertView
 					.findViewById(R.id.cover_user_photo);
 			imageLoader.displayImage(mlist.get(position).getMark_user()
@@ -507,7 +565,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 		@Override
 		public void onClick(View v) {
-			ShowToast(v.getContentDescription().toString());
+			Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
+			intent.putExtra("obj_id", v.getContentDescription().toString());
+			startActivity(intent);
 		}
 	};
 
@@ -553,6 +613,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 						* Math.cos(lat2) * sb2 * sb2));
 		return d;
 	}
+	
+	
+	/**
+	 * 添加标签
+	 * @param tag
+	 * @param i
+	 */
+	@SuppressLint("NewApi")
+	public void AddTag(String tag, int i,FlowLayout site_labels) {
+		final TextView mTag = new TextView(MainActivity.this);
+		mTag.setText("  " + tag + "    ");
+		// mTag.setPadding(0, 15, 40, 15);
+		mTag.setGravity(Gravity.CENTER);
+		mTag.setTextSize(12);
+		mTag.setBackground(getResources().getDrawable(R.drawable.mylable));
+		// mTag.setBackgroundColor(getResources().getColor(R.color.black));
+		mTag.setTextColor(Color.BLACK);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 40);
+		params.setMargins(10, 10, 20, 10);
+		site_labels.addView(mTag, i, params);
+
+	}
+	
 	
 	// /**
 	// * 加载图片

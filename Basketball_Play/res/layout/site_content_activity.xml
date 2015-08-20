@@ -63,12 +63,18 @@
     </LinearLayout>
 
     <TextView
+        android:id="@id/map_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" 
+        android:text="@string/site_map"
+        android:gravity="right"
+        android:paddingRight="60dp"
+        android:textColor="#03a9f4"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:paddingLeft="5dp" >
 
         <ImageView
@@ -77,10 +83,11 @@
             android:layout_gravity="center_vertical"
             android:background="@drawable/tt" />
 
-        <TextView
+        <com.basketball.play.view.FlowLayout
             android:id="@id/site_content_label"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content">
+            </com.basketball.play.view.FlowLayout>
     </LinearLayout>
 
     <LinearLayout

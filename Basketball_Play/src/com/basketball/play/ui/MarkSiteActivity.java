@@ -110,10 +110,12 @@ public class MarkSiteActivity extends BaseActivity{
 	@Override
 	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
 		if(arg0 == 0 && arg1==0){
-			tag_vessel.removeAllViewsInLayout();
-			label_list = (List<Label>)arg2.getSerializableExtra("add_labels");
-			for(int i=0;i<label_list.size();i++){
-				AddTag(label_list.get(i).getLabel_name(), i);
+			if(arg2!=null){
+				tag_vessel.removeAllViewsInLayout();
+				label_list = (List<Label>)arg2.getSerializableExtra("add_labels");
+				for(int i=0;i<label_list.size();i++){
+					AddTag(label_list.get(i).getLabel_name(), i);
+				}
 			}
 		}
 		if(arg0 == 2){

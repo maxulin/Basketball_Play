@@ -89,6 +89,14 @@
             android:name="com.basketball.play.ui.LocationActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar" >
         </activity>
+        <activity
+            android:name="com.basketball.play.ui.UserInfoActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="com.basketball.play.ui.MapActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar" >
+        </activity>
         <activity android:name="com.basketball.play.ResideMenuDemo.SettingActivity" >
         </activity>
 
