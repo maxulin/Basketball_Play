@@ -92,7 +92,7 @@ public class RegistActivity extends BaseActivity {
 		progress.show();
 		final UserBean user = new UserBean();
 		user.setUsername(user_message);
-		user.setPassword(password);
+		user.setPwd(password);
 		user.setDeviceType("android");
 		user.setInstallId(BmobInstallation.getInstallationId(this));
 		user.signUp(this, new SaveListener() {

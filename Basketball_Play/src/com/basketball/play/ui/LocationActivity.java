@@ -43,7 +43,7 @@ import com.bmob.utils.BmobLog;
  * @author smile
  * @date 2014-6-23 下午3:17:05
  */
-public class LocationActivity extends BaseActivity implements
+public class LocationActivity extends ActivityBase implements
 		OnGetGeoCoderResultListener {
 
 	// 定位相关

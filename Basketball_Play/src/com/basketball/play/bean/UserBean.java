@@ -15,6 +15,8 @@ public class UserBean extends BmobChatUser{
 	private int height;
 	private int weight;
 	private int role;
+	private String pwd;
+	private Date start_time;
 	private boolean sex;
 	/**
 	 * //显示数据拼音的首字母
@@ -65,6 +67,18 @@ public class UserBean extends BmobChatUser{
 	}
 	public void setSex(boolean sex) {
 		this.sex = sex;
+	}
+	public String getPwd() {
+		return pwd;
+	}
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+	public Date getStart_time() {
+		return start_time;
+	}
+	public void setStart_time(Date start_time) {
+		this.start_time = start_time;
 	}
 	
 }

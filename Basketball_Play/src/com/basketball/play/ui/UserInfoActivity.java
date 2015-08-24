@@ -21,7 +21,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class UserInfoActivity extends BaseActivity {
+public class UserInfoActivity extends ActivityBase {
 	private ImageView user_img_large,user_info_sex;
 	private TextView user_text_name,user_textv_name,play_time,user_role,individual_resume,group_count,site_count;
 	private ImageLoader imageLoader;

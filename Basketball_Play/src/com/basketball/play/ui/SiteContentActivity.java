@@ -41,7 +41,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class SiteContentActivity extends BaseActivity {
+public class SiteContentActivity extends ActivityBase {
 	private ImageView site_image;
 	private TextView site_name,map_view;
 	private TextView site_address;

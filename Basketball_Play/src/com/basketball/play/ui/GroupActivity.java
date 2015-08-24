@@ -37,7 +37,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-public class GroupActivity extends BaseActivity {
+public class GroupActivity extends ActivityBase {
 	private EditText group_name;
 	private EditText group_content;
 	private CircularImage group_img;

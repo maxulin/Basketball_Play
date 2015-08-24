@@ -76,4 +76,5 @@
     <string name="site_text">球场</string>
     <string name="site_map">>>到这里打球</string>
     <string name="map_content">球场位置</string>
+    <string name="message_search_hint">搜索&#8230;</string>
 </resources>

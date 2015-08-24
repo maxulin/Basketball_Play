@@ -24,7 +24,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class GroupContentActivity extends BaseActivity {
+public class GroupContentActivity extends ActivityBase {
 	private TextView group_text_content;
 	private TextView group_text_location;
 	private TextView group_text_master;

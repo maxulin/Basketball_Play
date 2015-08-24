@@ -1,4 +1,4 @@
-package com.basketball.play.ui;
+package com.basketball.play.util;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,7 +2,6 @@ package com.basketball.play.ResideMenuDemo;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -56,8 +54,6 @@ import com.basketball.play.ui.SiteContentActivity;
 import com.basketball.play.ui.UserInfoActivity;
 import com.basketball.play.view.CircularImage;
 import com.basketball.play.view.FlowLayout;
-import com.basketball.play.view.XListView;
-import com.basketball.play.view.XListView.IXListViewListener;
 import com.basketball.play.CustomApplcation;
 import com.basketball.play.R;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
@@ -78,7 +74,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 	private ResideMenuItem itemHuiyuan,itemQianbao,itemZhuangban,itemShoucang,itemXiangce;
 	private ResideMenuInfo info;
-	private boolean is_closed = false;
+	private boolean is_closed = true;
 	private long mExitTime;
 
 	private Button leftMenu;
@@ -518,15 +514,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 		return list;
 	}
 
-	private void getmoreList() {// 获取以前的信息
-		// list.add("more Message");
-		// list.add("more Message");
-		// list.add("more Message");
-		// list.add("more Message");
-		// list.add("more Message");
-		// list.add("more Message");
-	}
-
 	public class MyBaseAdapter extends BaseAdapter {
 		private Context mContext;
 		private LayoutInflater mInflater;
@@ -674,172 +661,4 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 	}
 	
-	
-	// /**
-	// * 加载图片
-	// *
-	// * @author Administrator
-	// *
-	// */
-	// public class ImageLoader {
-	//
-	// public void loadImage(String url, CircularImage imageView) {
-	// if (cancelPotentialDownload(url, imageView)) {
-	// BitmapDownloaderTask task = new BitmapDownloaderTask(imageView);
-	// DownloadedDrawable downloadedDrawable = new DownloadedDrawable(task);
-	// imageView.setImageDrawable(downloadedDrawable);
-	// task.execute(url);
-	// }
-	// }
-	// }
-	//
-	// /**
-	// * 异步下载图片
-	// *
-	// * @author Administrator
-	// *
-	// */
-	// class BitmapDownloaderTask extends AsyncTask<String, Void, Bitmap> {
-	// private String url;
-	// private final WeakReference<CircularImage> imageViewReference;
-	//
-	// public BitmapDownloaderTask(CircularImage imageView) {
-	// imageViewReference = new WeakReference<CircularImage>(imageView);
-	// }
-	//
-	// @Override
-	// // Once the image is downloaded, associates it to the imageView
-	// protected void onPostExecute(Bitmap bitmap) {
-	// if (isCancelled()) {
-	// bitmap = null;
-	// }
-	//
-	// if (imageViewReference != null) {
-	// CircularImage imageView = imageViewReference.get();
-	// BitmapDownloaderTask bitmapDownloaderTask =
-	// getBitmapDownloaderTask(imageView);
-	// // Change bitmap only if this process is still associated with
-	// // it
-	// if (this == bitmapDownloaderTask) {
-	// imageView.setImageBitmap(bitmap);
-	// }
-	// }
-	// }
-	//
-	// @Override
-	// protected Bitmap doInBackground(String... params) {
-	// return downloadBitmap(params[0]);
-	// }
-	// }
-	//
-	// /**
-	// * http请求下载网络图片
-	// *
-	// * @param url
-	// * @return
-	// */
-	// static Bitmap downloadBitmap(String url) {
-	// final AndroidHttpClient client = AndroidHttpClient
-	// .newInstance("Android");
-	// final HttpGet getRequest = new HttpGet(url);
-	//
-	// try {
-	// HttpResponse response = client.execute(getRequest);
-	// final int statusCode = response.getStatusLine().getStatusCode();
-	// if (statusCode != HttpStatus.SC_OK) {
-	// Log.w("ImageDownloader", "Error " + statusCode
-	// + " while retrieving bitmap from " + url);
-	// return null;
-	// }
-	//
-	// final HttpEntity entity = response.getEntity();
-	// if (entity != null) {
-	// InputStream inputStream = null;
-	// try {
-	// inputStream = entity.getContent();
-	// final Bitmap bitmap = BitmapFactory
-	// .decodeStream(inputStream);
-	// return bitmap;
-	// } finally {
-	// if (inputStream != null) {
-	// inputStream.close();
-	// }
-	// entity.consumeContent();
-	// }
-	// }
-	// } catch (Exception e) {
-	// // Could provide a more explicit error message for IOException or
-	// // IllegalStateException
-	// getRequest.abort();
-	// } finally {
-	// if (client != null) {
-	// client.close();
-	// }
-	// }
-	// return null;
-	// }
-	//
-	// /**
-	// * 判断imageview是否有线程在下载图片
-	// *
-	// * @param url
-	// * @param imageView
-	// * @return
-	// */
-	// private static boolean cancelPotentialDownload(String url,
-	// CircularImage imageView) {
-	// BitmapDownloaderTask bitmapDownloaderTask =
-	// getBitmapDownloaderTask(imageView);
-	//
-	// if (bitmapDownloaderTask != null) {
-	// String bitmapUrl = bitmapDownloaderTask.url;
-	// if ((bitmapUrl == null) || (!bitmapUrl.equals(url))) {
-	// bitmapDownloaderTask.cancel(true);
-	// } else {
-	// // 相同的url已经在下载中.
-	// return false;
-	// }
-	// }
-	// return true;
-	// }
-	//
-	// /**
-	// * 获取图片下载异步线程状态
-	// *
-	// * @param imageView
-	// * @return
-	// */
-	// private static BitmapDownloaderTask getBitmapDownloaderTask(
-	// CircularImage imageView) {
-	// if (imageView != null) {
-	// Drawable drawable = imageView.getDrawable();
-	// if (drawable instanceof DownloadedDrawable) {
-	// DownloadedDrawable downloadedDrawable = (DownloadedDrawable) drawable;
-	// return downloadedDrawable.getBitmapDownloaderTask();
-	// }
-	// }
-	// return null;
-	// }
-	//
-	// /**
-	// * 为imageview记录下载任务
-	// *
-	// * @author Administrator
-	// *
-	// */
-	// static class DownloadedDrawable extends ColorDrawable {
-	// private final WeakReference<BitmapDownloaderTask>
-	// bitmapDownloaderTaskReference;
-	//
-	// public DownloadedDrawable(BitmapDownloaderTask bitmapDownloaderTask) {
-	// super(Color.BLACK);
-	// bitmapDownloaderTaskReference = new WeakReference<BitmapDownloaderTask>(
-	// bitmapDownloaderTask);
-	// }
-	//
-	// public BitmapDownloaderTask getBitmapDownloaderTask() {
-	// return bitmapDownloaderTaskReference.get();
-	// }
-	// }
-
 }

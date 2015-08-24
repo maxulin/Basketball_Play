@@ -21,6 +21,7 @@ import com.basketball.play.bean.GroupMsg;
 import com.basketball.play.bean.UserBean;
 import com.basketball.play.config.BmobConstants;
 import com.basketball.play.util.CommonUtils;
+import com.basketball.play.util.FaceTextUtils;
 import com.basketball.play.view.EmoticonsEditText;
 import com.basketball.play.view.HeaderLayout;
 import com.basketball.play.view.XListView;

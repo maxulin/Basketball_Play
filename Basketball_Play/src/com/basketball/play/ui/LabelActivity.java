@@ -17,7 +17,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -32,7 +31,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-public class LabelActivity extends BaseActivity{
+public class LabelActivity extends ActivityBase{
 	private ListView listView;
 	FlowLayout tag_vessel;
 	List<String> mTagList = new ArrayList<String>();

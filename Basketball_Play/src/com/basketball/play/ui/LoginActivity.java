@@ -89,7 +89,7 @@ public class LoginActivity extends BaseActivity {
 		progress.show();
 		UserBean userBean = new UserBean();
 		userBean.setUsername(user_message);
-		userBean.setPassword(password_text);
+		userBean.setPwd(password_text);
 		userManager.login(userBean, new SaveListener() {
 			
 			@Override
