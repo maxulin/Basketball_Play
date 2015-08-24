@@ -60,6 +60,7 @@ public class SplashActivity extends FragmentActivity {
 		// TODO Auto-generated method stub
 		super.onResume();
 		if (userManager.getCurrentUser() != null) {
+			
 			// 每次自动登陆的时候就需要更新下当前位置和好友的资料，因为好友的头像，昵称啥的是经常变动的
 			mHandler.sendEmptyMessageDelayed(GO_HOME, 2000);
 		} else {
@@ -91,8 +92,17 @@ public class SplashActivity extends FragmentActivity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case GO_HOME:
-				while(CustomApplcation.lastPoint==null){
-					mLocationClient.start();
+				for(int i=0;i<4;i++){
+					if(CustomApplcation.lastPoint==null){
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}else{
+						mLocationClient.start();
+					}
 				}
 				startAnimActivity(MainActivity.class);
 				finish();

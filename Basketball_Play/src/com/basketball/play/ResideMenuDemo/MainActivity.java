@@ -13,9 +13,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -31,6 +33,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.bmob.v3.BmobQuery;
@@ -57,6 +60,11 @@ import com.basketball.play.view.XListView;
 import com.basketball.play.view.XListView.IXListViewListener;
 import com.basketball.play.CustomApplcation;
 import com.basketball.play.R;
+import com.handmark.pulltorefresh.library.ILoadingLayout;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -68,12 +76,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 	private ResideMenu resideMenu;
 
-	private ResideMenuItem itemHuiyuan;
-	private ResideMenuItem itemQianbao;
-	private ResideMenuItem itemZhuangban;
-	private ResideMenuItem itemShoucang;
-	private ResideMenuItem itemXiangce;
-
+	private ResideMenuItem itemHuiyuan,itemQianbao,itemZhuangban,itemShoucang,itemXiangce;
 	private ResideMenuInfo info;
 	private boolean is_closed = false;
 	private long mExitTime;
@@ -81,7 +84,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 	private Button leftMenu;
 	private Button sign;
 
-	private XListView mListView;
 	private List<Site> list;
 	private Map<String,List<Label>> label_list;
 	private Context context;
@@ -89,6 +91,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 	private Handler mHandler;
 	private DisplayImageOptions options;
 	private LocationClient mLocationClient;
+	private PullToRefreshListView mPullRefreshListView;
 
 	private ImageLoader imageLoader;
 
@@ -104,14 +107,77 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 		setListener();
 		initImageLoader(getApplicationContext());
 		context = this;
-		mListView = (XListView) findViewById(R.id.xListView);
-		mListView.setXListViewListener(xListViewListener);
-		mListView.setOnItemClickListener(oicl);
-		mListView.setPullLoadEnable(true);
+		mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.xListView);
+		mPullRefreshListView.setMode(Mode.BOTH);
+		mPullRefreshListView.setOnItemClickListener(oicl);
 		initListview();
 		mHandler = new Handler();
-	}
+		mPullRefreshListView
+		.setOnRefreshListener(new OnRefreshListener2<ListView>()
+		{
+			@Override
+			public void onPullDownToRefresh(
+					PullToRefreshBase<ListView> refreshView)
+			{
+				initIndicator();
+				//这里写下拉刷新的任务
+				refreshList();
+//				new GetDataTask().execute();
+			}
 
+			@Override
+			public void onPullUpToRefresh(
+					PullToRefreshBase<ListView> refreshView)
+			{	
+				initIndicator();
+				Log.e("TAG", "onPullUpToRefresh");
+				//这里写上拉加载更多的任务
+				refreshList();
+			}
+		});
+	}
+	
+//	private class GetDataTask extends AsyncTask<Void, Void, List<Site>>
+//	{
+//
+//		@Override
+//		protected List<Site> doInBackground(Void... params)
+//		{
+//		}
+//
+//		@Override
+//		protected void onPostExecute(List<Site> result)
+//		{
+//			
+//		}
+//	}
+	String label = "";
+	private void initIndicator()  
+    {  
+		
+        ILoadingLayout startLabels = mPullRefreshListView  
+                .getLoadingLayoutProxy(true, false);  
+        startLabels.setPullLabel("往下拉...");// 刚下拉时，显示的提示  
+        startLabels.setRefreshingLabel("玩命加载中...");// 刷新时  
+        startLabels.setReleaseLabel("放开就刷新给你看...");// 下来达到一定距离时，显示的提示  
+        startLabels.setLastUpdatedLabel(label);
+  
+        ILoadingLayout endLabels = mPullRefreshListView.getLoadingLayoutProxy(  
+                false, true);
+        endLabels.setPullLabel("往上拉...");// 刚下拉时，显示的提示  
+        endLabels.setRefreshingLabel("正在加载...");// 刷新时  
+        endLabels.setReleaseLabel("放开就加载给你看...");// 下来达到一定距离时，显示的提示 
+        endLabels.setLastUpdatedLabel(label);
+          
+        label = DateUtils.formatDateTime(  
+                getApplicationContext(),  
+                System.currentTimeMillis(),  
+                DateUtils.FORMAT_SHOW_TIME  
+                        | DateUtils.FORMAT_SHOW_DATE  
+                        | DateUtils.FORMAT_ABBREV_ALL);
+        // Update the LastUpdatedLabel  
+    } 
+	
 	@SuppressWarnings("deprecation")
 	private void setUpMenu() {
 		leftMenu = (Button) findViewById(R.id.title_bar_left_menu);
@@ -320,56 +386,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 		mLocationClient.start();
 	}
 
-	private void refreshListview() {
-		initLocClient();
-		refreshList();
-		adapter = new MyBaseAdapter(context, list,label_list);
-		mListView.setAdapter(adapter);
-	}
-
-	private void onLoad() {// 显示拉出来时候的一些信息
-
-		mListView.stopRefresh();
-		mListView.stopLoadMore();
-		mListView.setRefreshTime(new Date().toLocaleString());
-		Log.i("======", "onLoad");
-	}
-
-	private IXListViewListener xListViewListener = new IXListViewListener() {
-
-		@Override
-		public void onRefresh() {
-
-			mHandler.postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					refreshListview();
-					onLoad();
-				}
-			}, 3000);
-		}
-
-		@Override
-		public void onLoadMore() {
-			mHandler.postDelayed(new Runnable() {// 这里只是个显示界面的例子而已,正在做的时候应该用post方法
-						@Override
-						public void run() {
-							getmoreList();
-							adapter.notifyDataSetChanged();
-							onLoad();
-						}
-					}, 3000);
-
-		}
-
-	};
 
 	OnItemClickListener oicl = new OnItemClickListener() {
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			String site_id = list.get(position - 1).getObjectId();
+			String site_id = list.get(position).getObjectId();
 			Intent intent = new Intent(MainActivity.this,
 					SiteContentActivity.class);
 			intent.putExtra("obj_id", site_id);
@@ -384,8 +407,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 		label_list = new HashMap<String, List<Label>>();
 		if (CustomApplcation.lastPoint == null) {
 			ShowToast("您的网络太慢啦，请下拉重试或稍等一会再试!");
+			initLocClient();
 			adapter = new MyBaseAdapter(context, list,label_list);
-			mListView.setAdapter(adapter);
+			mPullRefreshListView.setAdapter(adapter);
 			return;
 		}
 		progress = new ProgressDialog(MainActivity.this);
@@ -411,9 +435,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 			@Override
 			public void onError(int code, String msg) {
 				adapter = new MyBaseAdapter(context, list,label_list);
-				mListView.setAdapter(adapter);
+				mPullRefreshListView.setAdapter(adapter);
 				progress.dismiss();
-				ShowToast("数据获取错误，类型为:" + code + ",原因为" + msg);
+				if(code==9010){
+					ShowToast("服务器连接超时，请下拉重试！");
+				}
+				
 			}
 
 		});
@@ -450,34 +477,45 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 		i++;
 		if(i==list.size()){
 			adapter = new MyBaseAdapter(context, list,label_list);
-			mListView.setAdapter(adapter);
+			mPullRefreshListView.setAdapter(adapter);
 			progress.dismiss();
 			i=0;
 		}
 	}
 	
 
-	private void refreshList() {// 获取最新的信息
-		BmobQuery<Site> site_query = new BmobQuery<Site>();
-		site_query.addWhereNear("site_location", new BmobGeoPoint(
-				CustomApplcation.lastPoint.getLongitude(),
-				CustomApplcation.lastPoint.getLatitude()));
-		site_query.setLimit(10); // 获取最接近用户地点的10条数据
-		site_query.include("mark_user");
-		site_query.findObjects(this, new FindListener<Site>() {
-			@Override
-			public void onSuccess(List<Site> arg0) {
-				list = arg0;
-			}
+	private List<Site> refreshList() {// 获取最新的信息
+		if(CustomApplcation.lastPoint==null){
+			ShowToast("正在定位中，请稍等一会再试试！");
+			initLocClient();
+		}else{
+			BmobQuery<Site> site_query = new BmobQuery<Site>();
+			site_query.addWhereNear("site_location", new BmobGeoPoint(
+					CustomApplcation.lastPoint.getLongitude(),
+					CustomApplcation.lastPoint.getLatitude()));
+			site_query.setLimit(10); // 获取最接近用户地点的10条数据
+			site_query.include("mark_user");
+			site_query.findObjects(this, new FindListener<Site>() {
+				@Override
+				public void onSuccess(List<Site> arg0) {
+					list = arg0;
+					adapter.notifyDataSetChanged();
+					// Call onRefreshComplete when the list has been refreshed.
+					mPullRefreshListView.onRefreshComplete();
+				}
 
-			@Override
-			public void onError(int code, String msg) {
-				ShowToast("数据获取错误，类型为:" + code + ",原因为" + msg);
-				adapter = new MyBaseAdapter(context, list,label_list);
-				mListView.setAdapter(adapter);
-			}
+				@Override
+				public void onError(int code, String msg) {
+					if(code==9010){
+						ShowToast("服务器连接超时，请重试！");
+					}
+					// Call onRefreshComplete when the list has been refreshed.
+					mPullRefreshListView.onRefreshComplete();
+				}
 
-		});
+			});
+		}
+		return list;
 	}
 
 	private void getmoreList() {// 获取以前的信息
